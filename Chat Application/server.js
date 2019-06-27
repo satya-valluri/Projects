@@ -23,7 +23,7 @@ ioConnection.on('connection', (socket) => {
     console.log(`${new Date().toLocaleString('en-US')} ->Server::Socket - New Connection Received`);
     
     socket.on('chat-message', (msg) => {
-        console.log(`${new Date().toLocaleString('en-US')} : ${msg}`);
+        //console.log(`${new Date().toLocaleString('en-US')} : ${msg}`);
         //ioConnection.emit('chat-message',msg) //to all        
        socket.broadcast.emit('chat-message',msg)// to all other than sender.
     })
