@@ -4,12 +4,18 @@ let id = 0;
 const RenderTitle = () => <div className='alert alert-primary form-group' role='alert' >Chat App</div>
 
 const RenderChatList = ({ chatEntries }) => {
-    const chatListStyle = { position: "relative", top: "1vh", border: "1px solid pink", height: "70vh", overflow: "auto" }
+    const chatListStyle = { position: "relative", top: "1vh", border: "1px solid pink", height: "70vh", overflowY: "auto" }
     return (
-        <div className="form-group" style={chatListStyle}>
+        <div className="form-group" style={chatListStyle} onScroll={(e) => console.log('scrolling')}>
             {
                 chatEntries.map(element => {
-                    return <div key={id++} className='alert alert-light' role='alert'>{element.msg}</div>
+                    return (
+                        <div>
+                            <hr></hr>
+                            <div key={id++} className='alert alert-light' role='alert'>{element.msg}</div>
+                        </div>
+                    )
+
                 })
             }
         </div>

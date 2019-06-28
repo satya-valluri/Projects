@@ -7,12 +7,12 @@ const socketio = require('socket.io');
 const app = express();
 app.get('/', (req, res) => {
     console.log(`${new Date().toLocaleString('en-US')} ->HTTP  request received..!`);
-    res.send('<h1> Hello </h1>');
+    res.send('<h4> Hello <br/> You are connected to NodeJS Server Running a Chat App</h4>');
 })
 
 const server = http.createServer(app);
-server.listen(5000, () => {
-    console.log(`${new Date().toLocaleString('en-US')} ->HTTP Server listening on port 4000`);
+server.listen(8080, () => {
+    console.log(`${new Date().toLocaleString('en-US')} ->HTTP Server listening on port 8080`);
 })
 
 const ioConnection = socketio(server); 
