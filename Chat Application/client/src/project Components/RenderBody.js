@@ -8,10 +8,6 @@ import { AddChatAction } from '../redux/actions/ChatHistoryActions'
 
 let id = 0;
 
-const chatMessages = [
-    { sender: "user", msg: "Hi" },
-]
-
 const RenderBodyHelper = () => {
 
     const dispatch = useDispatch()
@@ -37,7 +33,7 @@ const RenderBodyHelper = () => {
 
     return (
         <div >            
-             return <RenderChatList key={id++} chatEntries={objArr.arr} />            
+             <RenderChatList key={id++} chatEntries={objArr.arr} />            
         </div>
     )
 }

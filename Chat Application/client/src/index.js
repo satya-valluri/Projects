@@ -14,7 +14,7 @@ const ChatApp = () => {
         <div style={{ margin: "auto", width: "80vh" }} >
             <Provider store={Store}>
                 <RenderHead />
-                <RenderBody />
+                <RenderBody />                
                 <RenderTail />
             </Provider>
         </div>

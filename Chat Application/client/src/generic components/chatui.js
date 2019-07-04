@@ -20,7 +20,7 @@ const RenderDumbInput = ({ rf, val, OnChangeCB, OnKeyDownCB }) => {
             <input ref={rf} type="text" className="form-control" placeholder="Type your chat here" aria-label="Username" aria-describedby="basic-addon1"
                 value={val}
                 onChange={OnChangeCB}
-                onKeyDown={OnKeyDownCB}
+                onKeyDown={OnKeyDownCB} 
             />
             <br />
         </div>
