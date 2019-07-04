@@ -1,10 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { RenderChatList } from '../generic components/chatui'
 
 import useSocket from '../socket'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AddChatAction } from '../redux/actions/ChatHistoryActions'
+
+let id = 0;
 
 const chatMessages = [
     { sender: "user", msg: "Hi" },
@@ -23,25 +25,19 @@ const RenderBodyHelper = () => {
     )
 
     useEffect(
-        () => { 
+        () => {
             if (socket)
                 socket.on('chat-message', cbfn)
         }, [socket, cbfn]
     )
 
-    useSelector(state => {
-
-        if (state.blob.length > 0)
-            console.log('received data from store' + JSON.stringify(state.blob))
-
-        return state.blob
+    const objArr = useSelector(state => {
+        return { arr: state.blob }
     });
 
-    console.log('rendering chat messages')
-
     return (
-        <div >
-            <RenderChatList chatEntries={chatMessages} />
+        <div >            
+             return <RenderChatList key={id++} chatEntries={objArr.arr} />            
         </div>
     )
 }
