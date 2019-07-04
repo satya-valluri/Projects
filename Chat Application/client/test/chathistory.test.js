@@ -2,7 +2,6 @@ const ChatHistoryReducer = require('../src/redux/reducers/ChatHistoryReducer');
 const AddChatAction =  require('../src/redux/actions/ChatHistoryActions');
 
 test('Test Add Chat', () => {
-
     const initialState = {
         blob: []
     }

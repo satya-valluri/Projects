@@ -1,5 +1,3 @@
-//import React from 'react'
-
 const initialState = {
     blob: []
 }
@@ -13,11 +11,7 @@ const ChatHistoryReducer = (state = initialState, action) => {
     }
 }
 
-/* 
-initialState = {
-blob : [{sender:"IronMan", msg:"I am the strongest"} , {sender:"SpiderMan", msg:"I am Incredible"}]
-}
-*/
+
 
 const AddChat = (state, payload) => {
     const newState ={};
@@ -29,3 +23,8 @@ const AddChat = (state, payload) => {
 export { ChatHistoryReducer }
 //module.exports = ChatHistoryReducer
 
+/* 
+initialState = {
+blob : [{sender:"IronMan", msg:"I am the strongest"} , {sender:"SpiderMan", msg:"I am Incredible"}]
+}
+*/
