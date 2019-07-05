@@ -16,17 +16,22 @@ const RenderTail = () => {
     const OnKeyDownCB = (e) => {
         if (e.key === 'Enter' && val.length > 1) {
             socket.emit('chat-message', val)
-            iRef.current.value = ''
+            clearValues()
         }
     }
 
     const OnSendCB = useCallback(
         (e) => {
             socket.emit('chat-message', val)
-            iRef.current.value = ''
+            clearValues()
         }
-        , [val,socket]);
+        , [val, socket]);
 
+    const clearValues = () => {
+        iRef.current.value = ''
+        SetVal("");
+    }
+    
     return (
         <div>
             <RenderDumbInput rf={iRef} val={val} OnChangeCB={OnChangeCB} OnKeyDownCB={OnKeyDownCB} />

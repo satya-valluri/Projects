@@ -11,7 +11,7 @@ import RenderTail from './project Components/RenderTail'
 
 const ChatApp = () => {
     return (
-        <div style={{ margin: "auto", width: "80vh" }} >
+        <div style={{ margin: "auto", width: "80vh",}} >
             <Provider store={Store}>
                 <RenderHead />
                 <RenderBody />                

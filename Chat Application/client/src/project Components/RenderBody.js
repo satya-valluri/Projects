@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect} from 'react'
 import { RenderChatList } from '../generic components/chatui'
 
 import useSocket from '../socket'
@@ -8,7 +8,7 @@ import { AddChatAction } from '../redux/actions/ChatHistoryActions'
 
 let id = 0;
 
-const RenderBodyHelper = () => {
+const RenderBody = () => { 
 
     const dispatch = useDispatch()
 
@@ -19,7 +19,7 @@ const RenderBodyHelper = () => {
             dispatch(AddChatAction({ sender: "user", msg }))
         }, [dispatch]
     )
-
+   
     useEffect(
         () => {
             if (socket)
@@ -32,10 +32,10 @@ const RenderBodyHelper = () => {
     });
 
     return (
-        <div >            
-             <RenderChatList key={id++} chatEntries={objArr.arr} />            
+        <div >
+             <RenderChatList key={id++} chatEntries={objArr.arr}/>            
         </div>
     )
 }
 
-export default RenderBodyHelper
+export default RenderBody

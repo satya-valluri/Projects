@@ -10,11 +10,7 @@ const OnConnectToServerCB = () => {
 
 const OnDisConnectToServerCB = () => console.log('dis-connected from server')
 
-// const OnMessageFromServerCB = (msg) => {
-//     console.log('received new message - ' + msg);
-// }
-
-const useSocket = (msgCallBack) => {
+const useSocket = () => {
     const [connected, SetConnected] = useState('false');
 
     if (socket === null || !connected) {
@@ -22,8 +18,6 @@ const useSocket = (msgCallBack) => {
         socket = io("http://10.140.202.77:8080/");
         socket.on('connect', msg => { SetConnected(true); OnConnectToServerCB(msg) })
         socket.on('disconnect', msg => OnDisConnectToServerCB(msg))
-        //socket.on('chat-message', msg => OnMessageFromServerCB(msg))
-        //socket.on('chat-message', msg => msgCallBack(msg))
     }
     else
         return socket;
