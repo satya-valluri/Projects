@@ -4,36 +4,20 @@ But first we need the Tour Model
 */
 const path = require("path");
 const fs = require("fs");
-const { readdir } = require("fs/promises");
+const sharp = require("sharp");
+//const { readdir } = require("fs/promises");
 const upload = require("../utilities/uploadfile");
+const {
+  asyncGetFullFileName,
+  isImage,
+  createHash,
+  resizeImage,
+} = require("./imageControllerUtil");
 
 const ImageModel = require("../models/imageModel");
 const imgDirectory = path.join(__dirname, "../images");
 
-const asyncGetFullFileName = async (path) => {
-  try {
-    const files = await readdir(path);
-    for await (const file of files) return file;
-  } catch (err) {
-    console.error(`  ERROR in the async call readdir \t : \t ${err}`);
-  }
-};
-
-const asyncIsImageFile = (fileName) => {
-  return new Promise((resolve, reject) => {
-    if (fileName.match(/.png|.jpeg|.jpg|.svg$/g) !== null) {
-      resolve(true);
-    } else resolve(false);
-  });
-};
-
-const isImage = async (fname) => {
-  const res = await asyncIsImageFile(fname);
-  return res;
-};
-
 const postImage = (req, res) => {
-  console.log("\n\t\t RECEIVED IMAGE FOR STORAGE");
   upload(req, res, async (err) => {
     if (err) {
       console.log("some error occured while downloading the file");
@@ -49,44 +33,56 @@ const postImage = (req, res) => {
 
       // TODO :  cleanup : delete all files but not folders in the rootdir/images folder
       //
-      // Step 1 . Get the profile picture full path
-      const imgDirectory = path.join(__dirname, "../images");
-      let fullFilename = "";
-      const fileName = await asyncGetFullFileName(imgDirectory);
-      fullFilename = imgDirectory.concat("\\", fileName);
+      try {
+        // Step 1 . Get the profile picture full path
+        const imgDirectory = path.join(__dirname, "..\\images");
+        let fullFilename = "";
+        const fileName = await asyncGetFullFileName(imgDirectory);
+        fullFilename = imgDirectory.concat("\\", fileName);
 
-      // Step 2 . Check if the file is an image
-      const isImageRes = await isImage(fullFilename);
-      isImageRes === true
-        ? console.log(`CHECK 1 : ${fullFilename} is an Image`) // proceed in this case
-        : console.log(`${fullFilename} is an NOT Image`); // return an error with appropriate body
+        // Step 2 . Check if the file is an image
+        const isImageRes = await isImage(fullFilename);
+        isImageRes === true
+          ? console.log(`CHECK 1 : ${fullFilename} is an Image  \n`) // proceed in this case
+          : console.log(`CHECK 1 : ${fullFilename} is an NOT Image\n`); // **RETURN** an error with appropriate body
 
-      // Step 3 . Check if the file size is less than 5MB
-      const size = fs.statSync(fullFilename).size;
-      if ((size > 5, 253, 120))
-        console.log(`CHECK2 : Image is less than 5MB : ${size}`); // we get the result in bytes
+        // Step 3 . Check if the file size is less than 5MB
+        const size = fs.statSync(fullFilename).size; // we get the result in bytes
+        if ((size > 5, 253, 120))
+          console.log(`CHECK 2 : Image is LESS than 5MB : ${size}\n`);
+        else console.log(`CHECK 2 : Image is GREATER than 5MB\n`);
 
-      // Step 3 . Create sha256 and query DB if the image is already been uploaded
-      // Step 4 . Check for unacceptable content in the image
-      // Step 5 . Profile Image (or) Post Image + store to subfolder "tocloudimages"
-      if (req.params.isProfile === "true") {
-        // Use shape image library to change the size to 128*128 pixels
-        // upload to cloud
-      } else {
-        // If it is a Post image resize to : 1200*1200 pixels
-        // upload to cloud
+        // Step 4 . Create sha256 and query DB if the image is already been uploaded
+        const hash = await createHash(fullFilename);
+        console.log(`CHECK 3 : The hash is \t ${hash}\n`);
+
+        // Step 5 . Check for unacceptable content in the image
+        //TODO : Install the needed Cloud SDK + make the call to get an output
+
+        // Step 6 . Profile Image (or) Post Image + store to subfolder "tocloudimages"
+        const reply = await resizeImage(
+          req.params.isProfile,
+          imgDirectory,
+          fullFilename
+        );
+        console.log(
+          `CHECK 4 . Successfully resized image : ${JSON.stringify(reply)}`
+          // {"format":"png","width":128,"height":128,"channels":4,"premultiplied":true,"size":3665}
+        );
+
+        // Step 6 . Store the information in the database
+        // Add 'imageurl',username,imagesha256hash,timestamp to mongodb database
+
+        // Step 7 . Finally send the image url + success code back to client
+        res.status(201).send({
+          status: "success",
+          data: {
+            imagesurl: "Responding to POST : Successfully Added Image",
+          },
+        });
+      } catch (err) {
+        console.log(`ERROR OCCURED WHILE IMAGE VERIFICATION : ${err}`);
       }
-
-      // Step 6 . Store the information in the database
-      // Add 'imageurl',username,imagesha256hash,timestamp to mongodb database
-
-      // Step 7 . Finally send the image url + success code back to client
-      res.status(201).send({
-        status: "success",
-        data: {
-          imagesurl: "Responding to POST : Successfully Added Image",
-        },
-      });
     }
   });
 };
