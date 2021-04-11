@@ -1,7 +1,8 @@
 const crypto = require("crypto");
 const fs = require("fs");
 const sharp = require("sharp");
-const { readdir } = require("fs/promises");
+const { readdir, rm } = require("fs/promises");
+const path = require("path");
 
 const asyncIsImageFile = (fileName) => {
   return new Promise((resolve, reject) => {
@@ -20,9 +21,34 @@ const asyncGetFullFileName = async (path) => {
   try {
     const files = await readdir(path);
     for await (const file of files) return file;
+    // we know that there will be only one file so returning
   } catch (err) {
     console.error(`  ERROR in the async call readdir \t : \t ${err}`);
   }
+};
+
+const cleanFiles = async (folderName) => {
+  try {
+    const files = await readdir("C:\\Users\\invasat\\Desktop\\dhKr\\images");
+    //const files = await readdir(`${imageDirectorybs}`);
+    for await (const file of files) {
+      const fullfileName = `C:\\Users\\invasat\\Desktop\\dhKr\\images\\${file}`;
+      console.log(`removing file ${fullfileName}`);
+      const res = await fs.unlink(fullfileName, (err) => {
+        if (err) throw err;
+        console.log(`File deleted successfully : ${fullfileName}`);
+      });
+    }
+    return true;
+  } catch (err) {
+    console.log("error while cleaning files");
+    console.log(err);
+    throw err;
+  }
+
+  // const res = await rm("C:\\Users\\invasat\\Desktop\\test\\images\\photo.png", {
+  //   force: true,
+  // });
 };
 
 const createHash = (fullFilename) => {
@@ -66,4 +92,5 @@ module.exports = {
   isImage,
   createHash,
   resizeImage,
+  cleanFiles,
 };
