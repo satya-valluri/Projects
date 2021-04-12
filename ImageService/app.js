@@ -5,7 +5,7 @@ const app = express();
 
 mongoose
   .connect(
-    "mongodb+srv://satya:welcome123%23@cluster0.ury8f.mongodb.net/imagedb?retryWrites=true&w=majority",
+    "mongodb+srv://uname:pwd@clustername.mongodb.net/imagedb?retryWrites=true&w=majority",
     { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false }
   )
   .then(
