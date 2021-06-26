@@ -5,7 +5,7 @@ import axios from "axios";
 
 function App() {
   function responseSuccessGoogle(res) {
-    console.log(res.tokenId);
+    console.log(res);
     axios({
       method: "POST",
       url: "http://localhost:8000/login",
