@@ -1,11 +1,14 @@
 import "./App.css";
 import { GoogleLogin } from "react-google-login";
-import { GoogleLogout } from "react-google-login";
 import axios from "axios";
 
 function App() {
   function responseSuccessGoogle(res) {
-    console.log(res);
+    console.log(
+      `Received Authentication from Google for : ${res.profileObj.email}`
+    );
+    console.log(`Sending TokenId to server to initiate Session`);
+
     axios({
       method: "POST",
       url: "http://localhost:8000/login",
@@ -14,7 +17,6 @@ function App() {
       console.log("------Response from server Below-------");
       console.log(res);
     });
-    //profileObj:
   }
 
   function responseFailureGoogle(err) {
