@@ -1,8 +1,16 @@
 import axios from "axios";
 
 function App() {
-  function Login() {
-    axios.post("http://localhost:3001/login");
+  async function Login() {
+    let res = await axios.post("http://localhost:3001/login");
+    console.log(res);
+    // axios({
+    //   method: "POST",
+    //   url: "http://localhost:3001/login",
+    // }).then((res) => {
+    //   console.log("------Response from server Below-------");
+    //   console.log(res);
+    // });
   }
 
   return (
