@@ -1,8 +1,9 @@
 const express = require("express");
 var cors = require("cors");
 const app = express();
-// The function express returns and Object.
 
+let foo = require("./routes/login/home");
+console.log(foo);
 const loginRouter = require("./routes/login/login");
 
 app.use(cors());
