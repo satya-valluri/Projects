@@ -1,0 +1,4 @@
+{
+  "mongouri": "mongodb+srv://dbuser:dbpassword@valluricluster.wexom.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+  "jwtSecret": "welcome123#"
+}
