@@ -1,26 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const { userModel: User } = require("../models/user");
-const { jwtSecret } = require("../config/default.json");
-const jwt = require("jsonwebtoken");
-
-function signToken(payload) {
-  return new Promise((resolve, reject) => {
-    jwt.sign(payload, jwtSecret, { expiresIn: 3600 }, function (err, token) {
-      if (err) {
-        reject(err);
-      }
-      resolve(token);
-    });
-  });
-}
+const { userModel: User } = require("../models/userModel");
+const { signToken } = require("../common/jwtUtil");
 
 router.post("/", async function (req, res) {
   let { name, email, password } = req.body;
+
+  //check for input : must do this in the model - fat model and thin controller concept
   if (!name || !email || !password) {
-    return res.status(400).json({
-      // should you return here??
-      msg: "Please enter all feilds",
+    return res.send({
+      code: 400,
+      msg: "Please Enter all fields",
+      email: savedUser.email,
     });
   }
 
@@ -28,37 +19,50 @@ router.post("/", async function (req, res) {
     let userInDb = await User.findOne({ email });
 
     if (userInDb) {
-      //existing user
-      return res.status(400).json({
-        msg: "user already exists",
+      return res.send({
+        code: 400,
+        msg: "user already exists with this email",
         email: email,
       });
     } else {
+      //save new user - below
       let newUser = new User({
         name: name,
         password: password,
         email: email,
       });
       let savedUser = await newUser.save();
-      console.log(savedUser);
+      //get a token with the payload as the id of the saved user
       let token = await signToken({ id: savedUser._id }); // if failed delete user
       console.log(token);
+      // send response to client with token
       if (savedUser) {
         return res.send({
-          msg: "Successfully saved user",
-          ...savedUser,
+          code: 200,
+          msg: "Successfully Registered user",
+          email: savedUser.email,
           token,
         });
       } else {
-        return res.status(500).json({ msg: "Failed to Login", email });
+        //return res.status(500).json({ msg: "Failed to Register User", email });
+        return res.send({
+          code: 500,
+          msg: "Error : Failed to Register User",
+          email: savedUser.email,
+        });
       }
     }
   } catch (error) {
-    console.log(`Failure to Register User with Email : ${email}`);
+    //TODO : Delete user + Make an entry into debug logs
+    return res.send({
+      code: 500,
+      msg: "Exception : Failed to Register User",
+      email: savedUser.email,
+    });
   }
 });
 
-module.exports.loginRouter = router;
+module.exports.registerUser = router;
 
 // Old way of storing objects
 // newUser.save(function (err, obj) {

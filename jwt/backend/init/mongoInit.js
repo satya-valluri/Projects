@@ -10,6 +10,7 @@ exports.connectToMongoDB = function () {
     .connect(mongouri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: false,
     })
     .then(
       () => {

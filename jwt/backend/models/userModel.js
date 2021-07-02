@@ -1,5 +1,5 @@
 const mongoose = require("mongoose"); // returns a mongoose object
-const { Schema } = mongoose; // extract the Schema variable which is a function
+const { Schema } = mongoose; // destructure the obj for the Schema variable which is a function
 
 const userSchema = new Schema({
   name: String,
@@ -8,3 +8,4 @@ const userSchema = new Schema({
 });
 
 exports.userModel = mongoose.model("users", userSchema);
+//users : Table / colelction
