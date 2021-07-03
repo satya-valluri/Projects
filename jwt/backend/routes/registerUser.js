@@ -8,22 +8,16 @@ router.post("/", async function (req, res) {
 
   //check for input : must do this in the model - fat model and thin controller concept
   if (!name || !email || !password) {
-    return res.send({
-      code: 400,
-      msg: "Please Enter all fields",
-      email: savedUser.email,
-    });
+    return res.status(400).json({ code: 400, msg: "Please Enter all fields" });
   }
 
   try {
     let userInDb = await User.findOne({ email });
 
     if (userInDb) {
-      return res.send({
-        code: 400,
-        msg: "user already exists with this email",
-        email: email,
-      });
+      return res
+        .status(400)
+        .json({ code: 400, msg: "Please Enter all fields", email });
     } else {
       //save new user - below
       let newUser = new User({

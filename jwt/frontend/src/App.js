@@ -7,19 +7,18 @@ function App() {
   let [password, setPassword] = useState("");
   let [dbusername, setDbUsername] = useState("");
   let [item, setItem] = useState("");
+  let [dbitems, setDbitems] = useState([]);
 
   async function Register() {
     try {
       let res = await axios.post("http://localhost:3001/register", {
         name: "satya",
-        //email: "prakash4455@gmail.com",
-        //        password: "password1",
         email: username,
         password,
       });
-      console.log(res);
+      //console.log(res);
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
     }
   }
 
@@ -47,6 +46,7 @@ function App() {
       let res = await axios(options);
       //setDbUsername(data.email);
       console.log(res);
+      setDbitems(res.data.items);
     } catch (error) {
       console.log(error);
     }
@@ -62,6 +62,7 @@ function App() {
       };
       let res = await axios(options);
       console.log(res);
+      setDbitems([...res.data.items]);
     } catch (error) {
       console.log(error);
     }
@@ -69,12 +70,8 @@ function App() {
 
   return (
     <div>
-      <button onClick={Register}>Register</button>
-      <br />
-      <br />
-
       <div>
-        <button onClick={Login}>Login</button>
+        <br />
         <label>User Name</label>
         <input
           value={username}
@@ -82,6 +79,7 @@ function App() {
             setUserName(e.target.value);
           }}
         ></input>
+        <br />
         <label>Password</label>
         <input
           value={password}
@@ -89,6 +87,9 @@ function App() {
             setPassword(e.target.value);
           }}
         ></input>
+        <br />
+        <button onClick={Login}>Login</button>
+        <button onClick={Register}>Register</button>
       </div>
       <label>Token : </label>
       <input
@@ -108,7 +109,15 @@ function App() {
           <input value={item} onChange={(e) => setItem(e.target.value)}></input>
           <button onClick={setItems}>Set Items</button>
         </div>
-        <button onClick={getItems}>Get Items</button>
+        <div>
+          Get Items and Show
+          <button onClick={getItems}>Get Items</button>
+          <ul>
+            {dbitems.map((value, index) => (
+              <li key={index}>{value}</li>
+            ))}
+          </ul>
+        </div>
       </div>
       <br />
     </div>
