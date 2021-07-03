@@ -5,7 +5,7 @@ const { signToken } = require("../common/jwtUtil");
 
 router.post("/", async function (req, res) {
   let { name, email, password } = req.body;
-
+  console.log(name, email, password);
   //check for input : must do this in the model - fat model and thin controller concept
   if (!name || !email || !password) {
     return res.status(400).json({ code: 400, msg: "Please Enter all fields" });
@@ -17,7 +17,7 @@ router.post("/", async function (req, res) {
     if (userInDb) {
       return res
         .status(400)
-        .json({ code: 400, msg: "Please Enter all fields", email });
+        .json({ code: 400, msg: "user already exists in Server", email });
     } else {
       //save new user - below
       let newUser = new User({
@@ -28,31 +28,27 @@ router.post("/", async function (req, res) {
       let savedUser = await newUser.save();
       //get a token with the payload as the id of the saved user
       let token = await signToken({ id: savedUser._id }); // if failed delete user
-      console.log(token);
       // send response to client with token
       if (savedUser) {
-        return res.send({
-          code: 200,
-          msg: "Successfully Registered user",
-          email: savedUser.email,
-          token,
-        });
+        // return res.send({
+        //   code: 200,
+        //   msg: "Successfully Registered user",
+        //   email: savedUser.email,
+        //   token,
+        // });
+        return res
+          .status(200)
+          .json({ code: 200, msg: "Successfully Registered user", email });
       } else {
-        //return res.status(500).json({ msg: "Failed to Register User", email });
-        return res.send({
-          code: 500,
-          msg: "Error : Failed to Register User",
-          email: savedUser.email,
-        });
+        return res.status(500).json({ msg: "Failed to Register User", email });
       }
     }
   } catch (error) {
     //TODO : Delete user + Make an entry into debug logs
-    return res.send({
-      code: 500,
-      msg: "Exception : Failed to Register User",
-      email: savedUser.email,
-    });
+
+    return res
+      .status(500)
+      .json({ msg: "Exception : Failed to Register User", email });
   }
 });
 

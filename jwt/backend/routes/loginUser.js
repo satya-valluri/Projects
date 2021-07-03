@@ -26,7 +26,7 @@ router.post("/", async function (req, res) {
     } else {
       return res.send({
         code: 400,
-        msg: "Please Register User to Login",
+        msg: "Invalid credentials",
       });
     }
   } catch (error) {
